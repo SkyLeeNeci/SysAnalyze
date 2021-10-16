@@ -1,4 +1,4 @@
-package com.alex;
+package com.karpenko;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
