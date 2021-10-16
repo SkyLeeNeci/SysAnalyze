@@ -169,6 +169,85 @@ public class LearningMatrixHandler {
         return elements;
     }
 
+     public AlfaBetaD1D2 denis1(List<int[]> kkk, int position) {
+
+        List<double[]> AlfaBeta = new ArrayList<>();
+        List<double[]> D1D2 = new ArrayList<>();
+
+        for (int j = 0; j < kkk.size(); j++) {
+            int[] elems = kkk.get(j);
+            double[] d = new double[elems.length];
+            double[] ab = new double[elems.length]; // alpha and beta
+
+            for (int k = 0; k < elems.length; k++) {
+                if ( position == j) {
+                    d[k] = roundAvoid((double) elems[k] / (double) elems.length);
+                    ab[k] = roundAvoid(1 - ((double) elems[k] / (double) elems.length));
+                } else {
+                    d[k] = roundAvoid(1 - ((double) elems[k] / (double) elems.length));
+                    ab[k] = roundAvoid((double) elems[k] / (double) elems.length);
+                }
+            }
+            AlfaBeta.add(ab);
+            D1D2.add(d);
+        }
+        return new AlfaBetaD1D2(AlfaBeta,D1D2);
+    }
+
+    private double roundAvoid(double value) {
+        double scale = Math.pow(10, 3);
+        return Math.round(value * scale) / scale;
+    }
+
+    // second image
+    public double[] calculateByKulbakFormula(AlfaBetaD1D2 abema) {
+
+        double[] alpha = abema.getAlfaBeta().get(1);
+        double[] betta = abema.getAlfaBeta().get(0);
+        double[] d1 = abema.getD1D2().get(1);
+        double[] d2 = abema.getD1D2().get(0);
+        double[] e = new double[alpha.length];
+
+        for (int i = 0; i < alpha.length; i++) {
+            if (d1[i] > 0.5 && d2[i] > 0.5) {
+                e[i] = (Math.log((2 - (alpha[i] + betta[i])) / (alpha[i] + betta[i])) / Math.log(2)) * (1 - (alpha[i] + betta[i]));
+            } else {
+                e[i] = 0;
+            }
+        }
+
+        return e;
+    }
+
+    // first image
+    public double[] calculateByShenonFormula(AlfaBetaD1D2 abema) {
+        double[] alpha = abema.getAlfaBeta().get(0);
+        double[] betta = abema.getAlfaBeta().get(1);
+        double[] d1 = abema.getD1D2().get(0);
+        double[] d2 = abema.getD1D2().get(1);
+        double[] e = new double[alpha.length];
+
+        for (int i = 0; i < alpha.length; i++) {
+            if (d1[i] > 0.5 && d2[i] > 0.5) {
+                double alphaResult = alpha[i] / (alpha[i] + d2[i]);
+                double bettaResult = betta[i] / (betta[i] + d1[i]);
+                double d1Result = d1[i] / (d1[i] + betta[i]);
+                double d2Result = d2[i] / (d2[i] + alpha[i]);
+
+                e[i] = 1 + 0.5 * ((alphaResult * log2(alphaResult)) + (bettaResult * log2(bettaResult)) + (d1Result * log2(d1Result)) + (d2Result * (log2(d2Result))));
+            } else {
+                e[i] = 0;
+            }
+        }
+
+        return e;
+    }
+
+    private double log2(double n) {
+        return n == 0 ? 0 : Math.log(n) / Math.log(2);
+    }
+
+
     public int getIntersectionRadius(List<int[]> list) {
 
         int[] vector = list.get(0);
