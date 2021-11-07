@@ -199,13 +199,7 @@ public class LearningMatrixHandler {
         return Math.round(value * scale) / scale;
     }
 
-    // second image
-    public double[] calculateByKulbakFormula(AlfaBetaD1D2 abema) {
-
-        double[] alpha = abema.getAlfaBeta().get(1);
-        double[] betta = abema.getAlfaBeta().get(0);
-        double[] d1 = abema.getD1D2().get(1);
-        double[] d2 = abema.getD1D2().get(0);
+    public double[] calculateByKulbakFormula(double[] alpha, double[] betta, double[] d1, double[] d2) {
         double[] e = new double[alpha.length];
 
         for (int i = 0; i < alpha.length; i++) {
@@ -219,12 +213,7 @@ public class LearningMatrixHandler {
         return e;
     }
 
-    // first image
-    public double[] calculateByShenonFormula(AlfaBetaD1D2 abema) {
-        double[] alpha = abema.getAlfaBeta().get(0);
-        double[] betta = abema.getAlfaBeta().get(1);
-        double[] d1 = abema.getD1D2().get(0);
-        double[] d2 = abema.getD1D2().get(1);
+    public double[] calculateByShenonFormula(double[] alpha, double[] betta, double[] d1, double[] d2) {
         double[] e = new double[alpha.length];
 
         for (int i = 0; i < alpha.length; i++) {

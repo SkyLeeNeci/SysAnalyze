@@ -88,10 +88,16 @@ public class Controller {
     private Label K2;
 
     @FXML
-    private LineChart<String, Number> chartKulbac;
+    private LineChart<String, Number> chartKulbacPictOne;
 
     @FXML
-    private LineChart<String , Number> chartShenon;
+    private LineChart<String, Number> chartShenonPictOne;
+
+    @FXML
+    private LineChart<String, Number> chartShenonPictTwo;
+
+    @FXML
+    private LineChart<String, Number> chartKulbacPictTwo;
 
     @FXML
     void initialize() {
@@ -194,34 +200,39 @@ public class Controller {
 
             System.out.println("====================================================================================================");
 
-            System.out.println(showReferenceVector(matrixHandler.calculateByKulbakFormula(alfaBetaD1D2pict2)));
+           /* System.out.println(showReferenceVector(matrixHandler.calculateByKulbakFormula(alfaBetaD1D2pict2)));
             System.out.println("==============================");
-            System.out.println(showReferenceVector((matrixHandler.calculateByShenonFormula(alfaBetaD1D2pict1))));
+            System.out.println(showReferenceVector((matrixHandler.calculateByShenonFormula(alfaBetaD1D2pict1))));*/
+            List<double[]> alfaBetaPictureOne = alfaBetaD1D2pict1.getAlfaBeta();
+            List<double[]> d1D2PictureOne = alfaBetaD1D2pict1.getD1D2();
+            List<double[]> alfaBetaPictureTwo = alfaBetaD1D2pict2.getAlfaBeta();
+            List<double[]> d1D2PictureTwo = alfaBetaD1D2pict2.getD1D2();
+            double[] KulbakForPictureOne = matrixHandler.calculateByKulbakFormula(alfaBetaPictureOne.get(0),alfaBetaPictureOne.get(1), d1D2PictureOne.get(0), d1D2PictureOne.get(1));
+            double[] ShenonForPictureOne = matrixHandler.calculateByShenonFormula(alfaBetaPictureOne.get(0),alfaBetaPictureOne.get(1), d1D2PictureOne.get(0), d1D2PictureOne.get(1));
+            double[] KulbakForPictureTwo = matrixHandler.calculateByKulbakFormula(alfaBetaPictureTwo.get(1), alfaBetaPictureTwo.get(0),d1D2PictureTwo.get(1),d1D2PictureTwo.get(0));
+            double[] ShenonForPictureTwo = matrixHandler.calculateByShenonFormula(alfaBetaPictureTwo.get(1), alfaBetaPictureTwo.get(0),d1D2PictureTwo.get(1),d1D2PictureTwo.get(0));
 
-
-            XYChart.Series<String , Number> chart1 = new XYChart.Series<>();
-            chart1.setName("");
-            double[] KFE1 = matrixHandler.calculateByKulbakFormula(alfaBetaD1D2pict2);
-
-            for (int i = 0; i < KFE1.length; i++) {
-                chart1.getData().add(new XYChart.Data<>(Integer.toString(i), KFE1[i]));
-            }
-            chartKulbac.getData().add(chart1);
-
-            XYChart.Series<String , Number> chart2 = new XYChart.Series<>();
-            chart2.setName("");
-            double[] KFE2 = matrixHandler.calculateByShenonFormula(alfaBetaD1D2pict1);
-
-            for (int i = 0; i < KFE2.length; i++) {
-                chart2.getData().add(new XYChart.Data<>(Integer.toString(i), KFE2[i]));
-            }
-            chartShenon.getData().add(chart2);
+            chartsBuilder(chartKulbacPictOne,KulbakForPictureOne);
+            chartsBuilder(chartShenonPictOne,ShenonForPictureOne);
+            chartsBuilder(chartKulbacPictTwo, KulbakForPictureTwo);
+            chartsBuilder(chartShenonPictTwo,ShenonForPictureTwo);
 
         } catch (IOException e) {
             System.out.println(e.getMessage());
 
         }
 
+    }
+
+    private void chartsBuilder(LineChart<String,Number> chart, double[] kfe){
+
+        XYChart.Series<String , Number> chart1 = new XYChart.Series<>();
+        chart1.setName("");
+
+        for (int i = 0; i < kfe.length; i++) {
+            chart1.getData().add(new XYChart.Data<>(Integer.toString(i), kfe[i]));
+        }
+        chart.getData().add(chart1);
     }
 
     private String showReferenceVector(boolean[] referenceVectors) {
