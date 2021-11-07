@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.chart.CategoryAxis?>
+<?import javafx.scene.chart.LineChart?>
+<?import javafx.scene.chart.NumberAxis?>
+<?import javafx.scene.chart.ScatterChart?>
+<?import javafx.scene.control.Accordion?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.shape.Line?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane prefHeight="768.0" prefWidth="1360.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.karpenko.Controller">
+   <ScatterChart fx:id="limits_graphic" layoutX="109.0" layoutY="655.0" prefHeight="150.0" prefWidth="231.0" title="Верхній та нижній допуски">
+      <xAxis>
+         <CategoryAxis side="BOTTOM" />
+      </xAxis>
+      <yAxis>
+         <NumberAxis side="LEFT" />
+      </yAxis>
+   </ScatterChart>
+   <TextArea fx:id="first_picture_matrix" layoutX="6.0" layoutY="146.0" prefHeight="100.0" prefWidth="200.0" />
+   <TextArea fx:id="second_picture_matrix" layoutX="238.0" layoutY="146.0" prefHeight="100.0" prefWidth="200.0" />
+   <TextArea fx:id="first_picture_binary_matrix" layoutX="6.0" layoutY="399.0" prefHeight="100.0" prefWidth="200.0" />
+   <TextArea fx:id="second_picture_binary_matrix" layoutX="238.0" layoutY="397.0" prefHeight="100.0" prefWidth="200.0" />
+   <Accordion />
+   <ImageView fx:id="first_picture" fitHeight="100.0" fitWidth="100.0" layoutX="56.0" layoutY="45.0" pickOnBounds="true" preserveRatio="true" />
+   <ImageView fx:id="second_picture" fitHeight="100.0" fitWidth="100.0" layoutX="298.0" layoutY="45.0" pickOnBounds="true" preserveRatio="true" />
+   <ImageView fx:id="first_picture_binary" fitHeight="100.0" fitWidth="100.0" layoutX="47.0" layoutY="297.0" pickOnBounds="true" preserveRatio="true" />
+   <ImageView fx:id="second_picture_binary" fitHeight="100.0" fitWidth="100.0" layoutX="288.0" layoutY="297.0" pickOnBounds="true" preserveRatio="true" />
+   <TextArea fx:id="ev_first" layoutX="9.0" layoutY="543.0" prefHeight="40.0" prefWidth="200.0" />
+   <TextArea fx:id="ev_second" layoutX="238.0" layoutY="543.0" prefHeight="40.0" prefWidth="200.0" />
+   <ImageView fx:id="ev_first_picture" fitHeight="40.0" fitWidth="130.0" layoutX="44.0" layoutY="607.0" pickOnBounds="true" preserveRatio="true" />
+   <ImageView fx:id="ev_second_picture" fitHeight="40.0" fitWidth="130.0" layoutX="273.0" layoutY="587.0" pickOnBounds="true" preserveRatio="true" />
+   <Label layoutX="97.0" layoutY="8.0" prefHeight="25.0" prefWidth="276.0" text="Початкові зображення та їх матриці">
+      <font>
+         <Font size="16.0" />
+      </font>
+   </Label>
+   <Label layoutX="109.0" layoutY="260.0" prefHeight="25.0" prefWidth="252.0" text="Бінарні матриці та їх зображення">
+      <font>
+         <Font size="16.0" />
+      </font>
+   </Label>
+   <Label layoutX="59.0" layoutY="507.0" prefHeight="25.0" prefWidth="314.0" text="Еталонні вектори та умовний штрих код">
+      <font>
+         <Font size="16.0" />
+      </font>
+   </Label>
+   <Label layoutX="520.0" layoutY="42.0" prefHeight="25.0" prefWidth="89.0" text="SK до своїх">
+      <font>
+         <Font size="14.0" />
+      </font>
+   </Label>
+   <TextArea fx:id="ownSKMatrixPctOne" layoutX="456.0" layoutY="76.0" prefHeight="25.0" prefWidth="200.0" />
+   <Label layoutX="749.0" layoutY="42.0" prefHeight="25.0" prefWidth="89.0" text="SK до сусіда">
+      <font>
+         <Font size="14.0" />
+      </font>
+   </Label>
+   <TextArea fx:id="neighborSKMatrixPctOne" layoutX="687.0" layoutY="76.0" prefHeight="25.0" prefWidth="200.0" />
+   <Label layoutX="585.0" layoutY="8.0" prefHeight="25.0" prefWidth="200.0" text="Для першого зображення">
+      <font>
+         <Font size="16.0" />
+      </font>
+   </Label>
+   <Line endX="-100.0" endY="862.0" layoutX="548.0" layoutY="1.0" startX="-100.0" />
+   <Line endX="-100.0" endY="862.5" layoutX="1005.0" layoutY="1.0" startX="-100.0" />
+   <Label layoutX="581.0" layoutY="121.0" prefHeight="25.0" prefWidth="190.0" text="Для другого зображення">
+      <font>
+         <Font size="16.0" />
+      </font>
+   </Label>
+   <TextArea fx:id="ownSKMatrixPctTwo" layoutX="456.0" layoutY="190.0" prefHeight="38.0" prefWidth="200.0" />
+   <TextArea fx:id="neighborSKMatrixPctTwo" layoutX="694.0" layoutY="190.0" prefHeight="38.0" prefWidth="200.0" />
+   <Label layoutX="512.0" layoutY="159.0" prefHeight="25.0" prefWidth="89.0" text="SK до своїх">
+      <font>
+         <Font size="14.0" />
+      </font>
+   </Label>
+   <Label layoutX="750.0" layoutY="159.0" prefHeight="25.0" prefWidth="89.0" text="SK до сусіда">
+      <font>
+         <Font size="14.0" />
+      </font>
+   </Label>
+   <ImageView fx:id="first_picture2" fitHeight="100.0" fitWidth="100.0" layoutX="526.0" layoutY="407.0" pickOnBounds="true" preserveRatio="true" />
+   <ImageView fx:id="second_picture2" fitHeight="100.0" fitWidth="100.0" layoutX="526.0" layoutY="507.0" pickOnBounds="true" preserveRatio="true" />
+   <ImageView fx:id="first_picture1" fitHeight="100.0" fitWidth="100.0" layoutX="626.0" layoutY="307.0" pickOnBounds="true" preserveRatio="true" />
+   <ImageView fx:id="second_picture1" fitHeight="100.0" fitWidth="100.0" layoutX="726.0" layoutY="307.0" pickOnBounds="true" preserveRatio="true" />
+   <Label contentDisplay="CENTER" layoutX="666.0" layoutY="449.0" text="  -">
+      <font>
+         <Font size="20.0" />
+      </font>
+   </Label>
+   <Label contentDisplay="CENTER" layoutX="768.0" layoutY="548.0" text="  -">
+      <font>
+         <Font size="20.0" />
+      </font>
+   </Label>
+   <Label fx:id="K1" layoutX="764.0" layoutY="456.0">
+      <font>
+         <Font size="18.0" />
+      </font>
+   </Label>
+   <Label fx:id="K2" layoutX="675.0" layoutY="550.0" text="1">
+      <font>
+         <Font size="18.0" />
+      </font>
+   </Label>
+   <LineChart fx:id="chartKulbac" layoutX="977.0" layoutY="260.0" prefHeight="220.0" prefWidth="304.0" title="Друге зображення метод Кульбака">
+     <xAxis>
+       <CategoryAxis side="BOTTOM" />
+     </xAxis>
+     <yAxis>
+       <NumberAxis side="LEFT" />
+     </yAxis>
+   </LineChart>
+   <LineChart fx:id="chartShenon" layoutX="977.0" layoutY="20.0" prefHeight="220.0" prefWidth="304.0" title="Преше зображення метод Шенона">
+     <xAxis>
+       <CategoryAxis side="BOTTOM" />
+     </xAxis>
+     <yAxis>
+       <NumberAxis side="LEFT" />
+     </yAxis>
+   </LineChart>
+</AnchorPane>
