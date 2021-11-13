@@ -109,7 +109,7 @@
          <Font size="18.0" />
       </font>
    </Label>
-   <LineChart fx:id="chartKulbacPictOne" layoutX="1017.0" layoutY="228.0" prefHeight="190.0" prefWidth="244.0" title="Перше зображення метод Кульбака">
+   <LineChart fx:id="chartShenonPictOne" layoutX="996.0" layoutY="209.0" prefHeight="205.0" prefWidth="283.0" title="Перше зображення метод Шенона">
      <xAxis>
        <CategoryAxis side="BOTTOM" />
      </xAxis>
@@ -117,7 +117,7 @@
        <NumberAxis side="LEFT" />
      </yAxis>
    </LineChart>
-   <LineChart fx:id="chartShenonPictOne" layoutX="1017.0" layoutY="19.0" prefHeight="190.0" prefWidth="244.0" title="Преше зображення метод Шенона">
+   <LineChart fx:id="chartKulbacPictOne" layoutX="996.0" layoutY="11.0" prefHeight="220.0" prefWidth="283.0" title="Преше зображення метод Кульбака">
      <xAxis>
        <CategoryAxis side="BOTTOM" />
      </xAxis>
@@ -125,7 +125,7 @@
        <NumberAxis side="LEFT" />
      </yAxis>
    </LineChart>
-   <LineChart fx:id="chartShenonPictTwo" layoutX="1017.0" layoutY="430.0" prefHeight="180.0" prefWidth="244.0" title="Друге зображення метод Шенона">
+   <LineChart fx:id="chartShenonPictTwo" layoutX="1005.0" layoutY="620.0" prefHeight="220.0" prefWidth="283.0" title="Друге зображення метод Шенона">
      <xAxis>
        <CategoryAxis side="BOTTOM" />
      </xAxis>
@@ -133,7 +133,7 @@
        <NumberAxis side="LEFT" />
      </yAxis>
    </LineChart>
-   <LineChart fx:id="chartKulbacPictTwo" layoutX="1017.0" layoutY="635.0" prefHeight="190.0" prefWidth="244.0" title="Друге зображення метод Кульбака">
+   <LineChart fx:id="chartKulbacPictTwo" layoutX="1005.0" layoutY="410.0" prefHeight="220.0" prefWidth="283.0" title="Друге зоюраження метод Кульбака">
      <xAxis>
        <CategoryAxis side="BOTTOM" />
      </xAxis>

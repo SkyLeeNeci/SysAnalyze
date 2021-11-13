@@ -161,18 +161,18 @@ public class Controller {
 
             List<int[]> SKDistances = matrixHandler.calculateDistance();
 
-            ownSKMatrixPctOne.setText(showReferenceVector(SKDistances.get(0)));
+            /*ownSKMatrixPctOne.setText(showReferenceVector(SKDistances.get(0)));
             neighborSKMatrixPctOne.setText(showReferenceVector(SKDistances.get(1)));
             ownSKMatrixPctTwo.setText(showReferenceVector(SKDistances.get(3)));
-            neighborSKMatrixPctTwo.setText(showReferenceVector(SKDistances.get(2)));
+            neighborSKMatrixPctTwo.setText(showReferenceVector(SKDistances.get(2)));*/
 
             List<int[]> elementsInRadiusPictOne = matrixHandler.elementsInRadius(SKDistances.subList(0, 2));
             List<int[]> elementsInRadiusPictTwo = matrixHandler.elementsInRadius(SKDistances.subList(2, 4));
 
-            System.out.println(showReferenceVector(elementsInRadiusPictOne.get(0)));
+           /* System.out.println(showReferenceVector(elementsInRadiusPictOne.get(0)));
             System.out.println(showReferenceVector(elementsInRadiusPictOne.get(1)));
             System.out.println(showReferenceVector(elementsInRadiusPictTwo.get(0)));
-            System.out.println(showReferenceVector(elementsInRadiusPictTwo.get(1)));
+            System.out.println(showReferenceVector(elementsInRadiusPictTwo.get(1)));*/
 
             int ev1 = matrixHandler.getDifference();
             int ev2 = matrixHandler.getDifference();
@@ -186,12 +186,13 @@ public class Controller {
             AlfaBetaD1D2 alfaBetaD1D2pict1 = matrixHandler.denis1(elementsInRadiusPictOne, 0);
             AlfaBetaD1D2 alfaBetaD1D2pict2 = matrixHandler.denis1(elementsInRadiusPictTwo, 1);
 
+            System.out.println("==============Точнісні характеристики зображення 1================");
             System.out.println(showReferenceVector(alfaBetaD1D2pict1.getAlfaBeta().get(0)));
             System.out.println(showReferenceVector(alfaBetaD1D2pict1.getAlfaBeta().get(1)));
             System.out.println(showReferenceVector(alfaBetaD1D2pict1.getD1D2().get(0)));
             System.out.println(showReferenceVector(alfaBetaD1D2pict1.getD1D2().get(1)));
 
-            System.out.println("==============================");
+            System.out.println("==============Точнісні характеристики зображення 2================");
 
             System.out.println(showReferenceVector(alfaBetaD1D2pict2.getAlfaBeta().get(1)));
             System.out.println(showReferenceVector(alfaBetaD1D2pict2.getAlfaBeta().get(0)));
@@ -200,9 +201,10 @@ public class Controller {
 
             System.out.println("====================================================================================================");
 
-           /* System.out.println(showReferenceVector(matrixHandler.calculateByKulbakFormula(alfaBetaD1D2pict2)));
+            /*System.out.println(showReferenceVector(matrixHandler.calculateByKulbakFormula(alfaBetaD1D2pict2)));
             System.out.println("==============================");
             System.out.println(showReferenceVector((matrixHandler.calculateByShenonFormula(alfaBetaD1D2pict1))));*/
+
             List<double[]> alfaBetaPictureOne = alfaBetaD1D2pict1.getAlfaBeta();
             List<double[]> d1D2PictureOne = alfaBetaD1D2pict1.getD1D2();
             List<double[]> alfaBetaPictureTwo = alfaBetaD1D2pict2.getAlfaBeta();
@@ -211,6 +213,11 @@ public class Controller {
             double[] ShenonForPictureOne = matrixHandler.calculateByShenonFormula(alfaBetaPictureOne.get(0),alfaBetaPictureOne.get(1), d1D2PictureOne.get(0), d1D2PictureOne.get(1));
             double[] KulbakForPictureTwo = matrixHandler.calculateByKulbakFormula(alfaBetaPictureTwo.get(1), alfaBetaPictureTwo.get(0),d1D2PictureTwo.get(1),d1D2PictureTwo.get(0));
             double[] ShenonForPictureTwo = matrixHandler.calculateByShenonFormula(alfaBetaPictureTwo.get(1), alfaBetaPictureTwo.get(0),d1D2PictureTwo.get(1),d1D2PictureTwo.get(0));
+
+            System.out.print(showReferenceVector(KulbakForPictureOne) + "\n");
+            System.out.print(showReferenceVector(ShenonForPictureOne) + "\n");
+            System.out.print(showReferenceVector(KulbakForPictureTwo) + "\n");
+            System.out.print(showReferenceVector(ShenonForPictureTwo) + "\n");
 
             chartsBuilder(chartKulbacPictOne,KulbakForPictureOne);
             chartsBuilder(chartShenonPictOne,ShenonForPictureOne);
