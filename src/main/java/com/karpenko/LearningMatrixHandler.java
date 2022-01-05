@@ -10,6 +10,7 @@ public class LearningMatrixHandler {
     private int downLimit;
     private List<boolean[][]> matrixList = new ArrayList<>();
     private List<boolean[]> vectorsList = new ArrayList<>();
+    private List<Integer> neighbors = new ArrayList<>();
 
     public LearningMatrixHandler(int[] mainVector, int upLimit, int downLimit) {
         this.upLimit = upLimit;
@@ -89,24 +90,22 @@ public class LearningMatrixHandler {
 
     private int[] getUpLimit(int[] vector) {
         int[] upLimits = new int[vector.length];
-        System.out.println("=============UPLIMIT==================");
         for (int i = 0; i < vector.length; i++) {
             upLimits[i] = vector[i] + upLimit;
-            System.out.print(upLimits[i] + " ");
+            //System.out.print(upLimits[i] + " ");
         }
-        System.out.println();
+       // System.out.println();
         return upLimits;
     }
 
 
     private int[] getDownLimit(int[] vector) {
         int[] downLimits = new int[vector.length];
-        System.out.println("===============DOWNLIMIT================");
         for (int i = 0; i < vector.length; i++) {
             downLimits[i] = vector[i] - downLimit;
-            System.out.print(downLimits[i] + " ");
+            //System.out.print(downLimits[i] + " ");
         }
-        System.out.println();
+      //  System.out.println();
         return downLimits;
     }
 
@@ -122,18 +121,29 @@ public class LearningMatrixHandler {
         return true;
     }
 
-    public List<int[]> calculateDistance() {
-        List<int[]> list = new ArrayList<>();
-        for (boolean[][] matrix : matrixList) {
-            for (boolean[] vector : vectorsList) {
-                int[] distance = calculateDistance(matrix, vector);
-                list.add(distance);
+    public List<Different> calculateDistance() {
+        findNeighbor();
+        List<Different> list = new ArrayList<>();
+        for (int i=0; i<matrixList.size(); i++) {
+            Different different = new Different();
+            List<int[]> distances = new ArrayList<>();
+            List<boolean[]> neighborVectors = new ArrayList<>();
+            boolean[][] learningMatrix = matrixList.get(i);
+            boolean[] vector = vectorsList.get(i);
+            boolean[] neighborVector = vectorsList.get(neighbors.get(i));
+            neighborVectors.add(vector);
+            neighborVectors.add(neighborVector);
+            for (boolean[] v : neighborVectors){
+                int[] distance = calculateDistance(learningMatrix, v);
+                distances.add(distance);
             }
+            different.setSK(distances);
+            list.add(different);
         }
         return list;
     }
 
-    private int[] calculateDistance(boolean[][] matrix, boolean[] vector) {
+    public int[] calculateDistance(boolean[][] matrix, boolean[] vector) {
         int[] distance = new int[matrix[0].length];
         int countDifferences;
 
@@ -148,6 +158,47 @@ public class LearningMatrixHandler {
         }
 
         return distance;
+    }
+
+    private void findNeighbor() {
+        for (int i = 0; i < vectorsList.size(); i++) {
+            boolean[] vector = vectorsList.get(i);
+            int minDifference = 0;
+            int indexNeighbor = -1;
+
+            for (int j = 0; j < vectorsList.size(); j++) {
+                int difference = compareDifferences(vector, vectorsList.get(j));
+
+                if (minDifference < difference) {
+                    minDifference = difference;
+                    indexNeighbor = j;
+                }
+            }
+
+            if (indexNeighbor == -1) {
+                for (int j = 0; j < vectorsList.size(); j++) {
+                    if (j != i) {
+                        indexNeighbor = j;
+                        break;
+                    }
+                }
+            }
+
+
+            neighbors.add(indexNeighbor);
+        }
+    }
+
+    private int compareDifferences(boolean[] vectorOne, boolean[] vectorTwo) {
+        int countDifferences = 0;
+
+        for (int i = 0; i < vectorOne.length; i++) {
+            if (vectorOne[i] != vectorTwo[i]) {
+                countDifferences++;
+            }
+        }
+
+        return countDifferences;
     }
 
     public List<int[]> elementsInRadius(List<int[]> list) {
@@ -169,7 +220,7 @@ public class LearningMatrixHandler {
         return elements;
     }
 
-     public AlfaBetaD1D2 denis1(List<int[]> kkk, int position) {
+     public AlfaBetaD1D2 denis1(List<int[]> kkk) {
 
         List<double[]> AlfaBeta = new ArrayList<>();
         List<double[]> D1D2 = new ArrayList<>();
@@ -180,7 +231,7 @@ public class LearningMatrixHandler {
             double[] ab = new double[elems.length]; // alpha and beta
 
             for (int k = 0; k < elems.length; k++) {
-                if ( position == j) {
+                if ( j == 0) {
                     d[k] = roundAvoid((double) elems[k] / (double) elems.length);
                     ab[k] = roundAvoid(1 - ((double) elems[k] / (double) elems.length));
                 } else {
@@ -203,11 +254,7 @@ public class LearningMatrixHandler {
         double[] e = new double[alpha.length];
 
         for (int i = 0; i < alpha.length; i++) {
-            if (d1[i] > 0.5 && d2[i] > 0.5) {
-                e[i] = (Math.log((2 - (alpha[i] + betta[i])) / (alpha[i] + betta[i])) / Math.log(2)) * (1 - (alpha[i] + betta[i]));
-            } else {
-                e[i] = 0;
-            }
+            e[i] = 0.5 * (log2((d1[i] + d2[i] + 0.1) / (alpha[i] + betta[i] + 0.1)) * ((d1[i] + d2[i]) - (alpha[i] + betta[i])));
         }
 
         return e;
@@ -217,16 +264,12 @@ public class LearningMatrixHandler {
         double[] e = new double[alpha.length];
 
         for (int i = 0; i < alpha.length; i++) {
-            if (d1[i] > 0.5 && d2[i] > 0.5) {
-                double alphaResult = alpha[i] / (alpha[i] + d2[i]);
-                double bettaResult = betta[i] / (betta[i] + d1[i]);
-                double d1Result = d1[i] / (d1[i] + betta[i]);
-                double d2Result = d2[i] / (d2[i] + alpha[i]);
+            double alphaResult = alpha[i] == 0 ? 0 : (alpha[i] / (alpha[i] + d2[i])) * log2(alpha[i] / (alpha[i] + d2[i]));
+            double bettaResult = betta[i] == 0 ? 0 : (betta[i] / (betta[i] + d1[i])) * log2(betta[i] / (betta[i] + d1[i]));
+            double d1Result = d1[i] == 0 ? 0 : (d1[i] / (d1[i] + betta[i])) * log2(d1[i] / (d1[i] + betta[i]));
+            double d2Result = d2[i] == 0 ? 0 : (d2[i] / (d2[i] + alpha[i])) * log2(d2[i] / (d2[i] + alpha[i]));
 
-                e[i] = 1 + 0.5 * ((alphaResult * log2(alphaResult)) + (bettaResult * log2(bettaResult)) + (d1Result * log2(d1Result)) + (d2Result * (log2(d2Result))));
-            } else {
-                e[i] = 0;
-            }
+            e[i] = 1 + 0.5 * (alphaResult + bettaResult + d1Result + d2Result);
         }
 
         return e;

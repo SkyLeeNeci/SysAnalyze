@@ -37,7 +37,8 @@ public class Main extends Application {
     /*private static void showLearningMatrix(boolean[][] secondLearningMatrix) {
         for (int i = 0; i < secondLearningMatrix.length; i++) {
             for (int j = 0; j < secondLearningMatrix[0].length; j++) {
-                System.out.print((secondLearningMatrix[i][j] ? 1 : 0) + " ");
+                System.out.print((secondLearningMatrix[i]
+                [j] ? 1 : 0) + " ");
             }
             System.out.println();
         }

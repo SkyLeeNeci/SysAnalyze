@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
+
 import javafx.embed.swing.SwingFXUtils;
 import javafx.fxml.FXML;
 import javafx.scene.chart.LineChart;
@@ -101,9 +102,15 @@ public class Controller {
 
     @FXML
     void initialize() {
+
         try {
+
+            List<Double> optimization = someMEthod();
+
             ImageHandler firstImageHandler = new ImageHandler("1.bmp");
             ImageHandler secondImageHandler = new ImageHandler("2.bmp");
+            ImageHandler thirdImageHandler = new ImageHandler("11.bmp");
+            ImageHandler foursImageHandler = new ImageHandler("22.bmp");
             int[][] firstImageMatrix = firstImageHandler.getImageMatrix();
             first_picture.setImage(new Image(new File("1.bmp").toURI().toURL().toString()));
             second_picture.setImage(new Image(new File("2.bmp").toURI().toURL().toString()));
@@ -111,6 +118,7 @@ public class Controller {
             second_picture1.setImage(new Image(new File("2.bmp").toURI().toURL().toString()));
             first_picture2.setImage(new Image(new File("1.bmp").toURI().toURL().toString()));
             second_picture2.setImage(new Image(new File("2.bmp").toURI().toURL().toString()));
+
 
             StringBuilder builder1 = new StringBuilder();
             for (int i = 0; i < firstImageMatrix.length; i++) {
@@ -132,6 +140,8 @@ public class Controller {
             }
             second_picture_matrix.setText(builder2.toString());
 
+            int[][] thirdImageMatrix = thirdImageHandler.getImageMatrix();
+
             int[] firstVector = firstImageHandler.getVectors();
 
             for (int i = 0; i < firstVector.length; i++) {
@@ -140,8 +150,8 @@ public class Controller {
             System.out.println();
 
             //30 30 // 40 40 лучше
-            LearningMatrixHandler matrixHandler = new LearningMatrixHandler(firstVector, 30, 30);
-            matrixHandler.setMatrixList(Arrays.asList(firstImageMatrix, secondImageMatrix));
+            LearningMatrixHandler matrixHandler = new LearningMatrixHandler(firstVector, optimization.get(1).intValue(), optimization.get(1).intValue());
+            matrixHandler.setMatrixList(Arrays.asList(firstImageMatrix, secondImageMatrix, thirdImageMatrix));
 
             List<boolean[][]> matrixList = matrixHandler.getMatrixList();
             List<boolean[]> referensvectorslist = matrixHandler.getVectorsList();
@@ -156,18 +166,21 @@ public class Controller {
             ev_first.setText(showReferenceVector(referensvectorslist.get(0)));
             ev_second.setText(showReferenceVector(referensvectorslist.get(1)));
 
-            ev_first_picture.setImage(SwingFXUtils.toFXImage(imageFromReferenceMatrix(referensvectorslist.get(0)),null));
-            ev_second_picture.setImage(SwingFXUtils.toFXImage(imageFromReferenceMatrix(referensvectorslist.get(1)),null));
+            ev_first_picture.setImage(SwingFXUtils.toFXImage(imageFromReferenceMatrix(referensvectorslist.get(0)), null));
+            ev_second_picture.setImage(SwingFXUtils.toFXImage(imageFromReferenceMatrix(referensvectorslist.get(1)), null));
 
-            List<int[]> SKDistances = matrixHandler.calculateDistance();
+            List<Different> SKDistances = matrixHandler.calculateDistance();
 
-            /*ownSKMatrixPctOne.setText(showReferenceVector(SKDistances.get(0)));
-            neighborSKMatrixPctOne.setText(showReferenceVector(SKDistances.get(1)));
-            ownSKMatrixPctTwo.setText(showReferenceVector(SKDistances.get(3)));
-            neighborSKMatrixPctTwo.setText(showReferenceVector(SKDistances.get(2)));*/
+            ownSKMatrixPctOne.setText(showReferenceVector(SKDistances.get(0).getSK().get(0)));
+            neighborSKMatrixPctOne.setText(showReferenceVector(SKDistances.get(0).getSK().get(1)));
+            ownSKMatrixPctTwo.setText(showReferenceVector(SKDistances.get(1).getSK().get(0)));
+            neighborSKMatrixPctTwo.setText(showReferenceVector(SKDistances.get(1).getSK().get(1)));
+            //ownSKMatrixPctThree.setText(showReferenceVector(SKDistances.get(1).getSK().get(0)));
+            //neighborSKMatrixPctThree.setText(showReferenceVector(SKDistances.get(1).getSK().get(1)));
 
-            List<int[]> elementsInRadiusPictOne = matrixHandler.elementsInRadius(SKDistances.subList(0, 2));
-            List<int[]> elementsInRadiusPictTwo = matrixHandler.elementsInRadius(SKDistances.subList(2, 4));
+            List<int[]> elementsInRadiusPictOne = matrixHandler.elementsInRadius(SKDistances.get(0).getSK());
+            List<int[]> elementsInRadiusPictTwo = matrixHandler.elementsInRadius(SKDistances.get(1).getSK());
+            List<int[]> elementsInRadiusPictThree = matrixHandler.elementsInRadius(SKDistances.get(2).getSK());
 
            /* System.out.println(showReferenceVector(elementsInRadiusPictOne.get(0)));
             System.out.println(showReferenceVector(elementsInRadiusPictOne.get(1)));
@@ -183,8 +196,9 @@ public class Controller {
             K1.setText(String.valueOf(ev1));
             K2.setText(String.valueOf(ev2));
 
-            AlfaBetaD1D2 alfaBetaD1D2pict1 = matrixHandler.denis1(elementsInRadiusPictOne, 0);
-            AlfaBetaD1D2 alfaBetaD1D2pict2 = matrixHandler.denis1(elementsInRadiusPictTwo, 1);
+            AlfaBetaD1D2 alfaBetaD1D2pict1 = matrixHandler.denis1(elementsInRadiusPictOne);
+            AlfaBetaD1D2 alfaBetaD1D2pict2 = matrixHandler.denis1(elementsInRadiusPictTwo);
+            AlfaBetaD1D2 alfaBetaD1D2pict3 = matrixHandler.denis1(elementsInRadiusPictThree);
 
             System.out.println("==============Точнісні характеристики зображення 1================");
             System.out.println(showReferenceVector(alfaBetaD1D2pict1.getAlfaBeta().get(0)));
@@ -209,20 +223,29 @@ public class Controller {
             List<double[]> d1D2PictureOne = alfaBetaD1D2pict1.getD1D2();
             List<double[]> alfaBetaPictureTwo = alfaBetaD1D2pict2.getAlfaBeta();
             List<double[]> d1D2PictureTwo = alfaBetaD1D2pict2.getD1D2();
-            double[] KulbakForPictureOne = matrixHandler.calculateByKulbakFormula(alfaBetaPictureOne.get(0),alfaBetaPictureOne.get(1), d1D2PictureOne.get(0), d1D2PictureOne.get(1));
-            double[] ShenonForPictureOne = matrixHandler.calculateByShenonFormula(alfaBetaPictureOne.get(0),alfaBetaPictureOne.get(1), d1D2PictureOne.get(0), d1D2PictureOne.get(1));
-            double[] KulbakForPictureTwo = matrixHandler.calculateByKulbakFormula(alfaBetaPictureTwo.get(1), alfaBetaPictureTwo.get(0),d1D2PictureTwo.get(1),d1D2PictureTwo.get(0));
-            double[] ShenonForPictureTwo = matrixHandler.calculateByShenonFormula(alfaBetaPictureTwo.get(1), alfaBetaPictureTwo.get(0),d1D2PictureTwo.get(1),d1D2PictureTwo.get(0));
+            List<double[]> alfaBetaPictureThree = alfaBetaD1D2pict3.getAlfaBeta();
+            List<double[]> d1D2PictureThree = alfaBetaD1D2pict3.getD1D2();
+            double[] KulbakForPictureOne = matrixHandler.calculateByKulbakFormula(alfaBetaPictureOne.get(0), alfaBetaPictureOne.get(1), d1D2PictureOne.get(0), d1D2PictureOne.get(1));
+            double[] ShenonForPictureOne = matrixHandler.calculateByShenonFormula(alfaBetaPictureOne.get(0), alfaBetaPictureOne.get(1), d1D2PictureOne.get(0), d1D2PictureOne.get(1));
+            double[] KulbakForPictureTwo = matrixHandler.calculateByKulbakFormula(alfaBetaPictureTwo.get(0), alfaBetaPictureTwo.get(1), d1D2PictureTwo.get(0), d1D2PictureTwo.get(1));
+            double[] ShenonForPictureTwo = matrixHandler.calculateByShenonFormula(alfaBetaPictureTwo.get(0), alfaBetaPictureTwo.get(1), d1D2PictureTwo.get(0), d1D2PictureTwo.get(1));
+            double[] KulbakForPictureThree = matrixHandler.calculateByKulbakFormula(alfaBetaPictureThree.get(0), alfaBetaPictureThree.get(1),d1D2PictureThree.get(0),d1D2PictureThree.get(1));
+            double[] ShenonForPictureThree = matrixHandler.calculateByShenonFormula(alfaBetaPictureThree.get(0), alfaBetaPictureThree.get(1),d1D2PictureThree.get(0),d1D2PictureThree.get(1));
+
 
             System.out.print(showReferenceVector(KulbakForPictureOne) + "\n");
             System.out.print(showReferenceVector(ShenonForPictureOne) + "\n");
             System.out.print(showReferenceVector(KulbakForPictureTwo) + "\n");
             System.out.print(showReferenceVector(ShenonForPictureTwo) + "\n");
 
-            chartsBuilder(chartKulbacPictOne,KulbakForPictureOne);
-            chartsBuilder(chartShenonPictOne,ShenonForPictureOne);
+            chartsBuilder(chartKulbacPictOne, KulbakForPictureOne);
+            chartsBuilder(chartShenonPictOne, ShenonForPictureOne);
             chartsBuilder(chartKulbacPictTwo, KulbakForPictureTwo);
-            chartsBuilder(chartShenonPictTwo,ShenonForPictureTwo);
+            chartsBuilder(chartShenonPictTwo, ShenonForPictureTwo);
+
+            boolean[][] byteMatrix = matrixHandler.getByteMatrix(foursImageHandler.getImageMatrix());
+
+            examAlgorithm(byteMatrix,referensvectorslist,matrixHandler, Arrays.asList(KulbakForPictureOne,KulbakForPictureTwo, KulbakForPictureThree));
 
         } catch (IOException e) {
             System.out.println(e.getMessage());
@@ -231,9 +254,9 @@ public class Controller {
 
     }
 
-    private void chartsBuilder(LineChart<String,Number> chart, double[] kfe){
+    private void chartsBuilder(LineChart<String, Number> chart, double[] kfe) {
 
-        XYChart.Series<String , Number> chart1 = new XYChart.Series<>();
+        XYChart.Series<String, Number> chart1 = new XYChart.Series<>();
         chart1.setName("");
 
         for (int i = 0; i < kfe.length; i++) {
@@ -300,7 +323,7 @@ public class Controller {
                     color = 0xffffff;
                 }
 
-                bufferedImage.setRGB(i, j, color);
+                bufferedImage.setRGB(j, i, color);
             }
         }
 
@@ -326,7 +349,145 @@ public class Controller {
         return bufferedImage;
     }
 
+    public double optimized(double[] betta, double[] d1, double[] kfe){
+        double maxKfe = 0;
+        boolean wasFind = false;
+
+        for (int d = 0; d < kfe.length; d++) {
+            if (d1[d] > 0.5 && betta[d] < 0.5) {
+                if (kfe[d] > maxKfe) {
+                    maxKfe = kfe[d];
+                }
+
+                wasFind = true;
+            }
+        }
+
+        if (!wasFind) {
+            for (int d = 0; d < kfe.length; d++) {
+                if (kfe[d] > maxKfe) {
+                    maxKfe = kfe[d];
+                }
+            }
+        }
+        return maxKfe;
+    }
 
 
+    private List<Double> someMEthod() {
+
+        double maxKfeAverage = 0;
+        int delta = 0;
+
+        for (int i = 0; i < 100; i++) {
+
+            try {
+                ImageHandler firstImageHandler = new ImageHandler("1.bmp");
+                ImageHandler secondImageHandler = new ImageHandler("2.bmp");
+                ImageHandler thirdImageHandler = new ImageHandler("11.bmp");
+                int[][] firstImageMatrix = firstImageHandler.getImageMatrix();
+                int[][] secondImageMatrix = secondImageHandler.getImageMatrix();
+                int[][] thirdImageMatrix = thirdImageHandler.getImageMatrix();
+                int[] firstVector = firstImageHandler.getVectors();
+
+                //30 30 // 40 40 лучше
+                LearningMatrixHandler matrixHandler = new LearningMatrixHandler(firstVector, i, i);
+                matrixHandler.setMatrixList(Arrays.asList(firstImageMatrix, secondImageMatrix, thirdImageMatrix));
+
+                List<boolean[][]> matrixList = matrixHandler.getMatrixList();
+                List<boolean[]> referensvectorslist = matrixHandler.getVectorsList();
+                List<Different> SKDistances = matrixHandler.calculateDistance();
+                List<int[]> elementsInRadiusPictOne = matrixHandler.elementsInRadius(SKDistances.get(0).getSK());
+                List<int[]> elementsInRadiusPictTwo = matrixHandler.elementsInRadius(SKDistances.get(1).getSK());
+                List<int[]> elementsInRadiusPictThree = matrixHandler.elementsInRadius(SKDistances.get(2).getSK());
+
+
+                AlfaBetaD1D2 alfaBetaD1D2pict1 = matrixHandler.denis1(elementsInRadiusPictOne);
+                AlfaBetaD1D2 alfaBetaD1D2pict2 = matrixHandler.denis1(elementsInRadiusPictTwo);
+                AlfaBetaD1D2 alfaBetaD1D2pict3 = matrixHandler.denis1(elementsInRadiusPictThree);
+
+                List<double[]> alfaBetaPictureOne = alfaBetaD1D2pict1.getAlfaBeta();
+                List<double[]> d1D2PictureOne = alfaBetaD1D2pict1.getD1D2();
+                List<double[]> alfaBetaPictureTwo = alfaBetaD1D2pict2.getAlfaBeta();
+                List<double[]> d1D2PictureTwo = alfaBetaD1D2pict2.getD1D2();
+                List<double[]> alfaBetaPictureThree = alfaBetaD1D2pict3.getAlfaBeta();
+                List<double[]> d1D2PictureThree = alfaBetaD1D2pict3.getD1D2();
+
+
+                double[] KulbakForPictureOne = matrixHandler.calculateByKulbakFormula(alfaBetaPictureOne.get(0), alfaBetaPictureOne.get(1), d1D2PictureOne.get(0), d1D2PictureOne.get(1));
+                double[] KulbakForPictureTwo = matrixHandler.calculateByKulbakFormula(alfaBetaPictureTwo.get(0), alfaBetaPictureTwo.get(1), d1D2PictureTwo.get(0), d1D2PictureTwo.get(1));
+                double[] KulbakForPictureThree = matrixHandler.calculateByKulbakFormula(alfaBetaPictureThree.get(0), alfaBetaPictureThree.get(1),d1D2PictureThree.get(0),d1D2PictureThree.get(1));
+
+                double averageKfe = 0;
+
+               averageKfe += optimized(alfaBetaPictureOne.get(0),d1D2PictureOne.get(1),KulbakForPictureOne);
+               averageKfe += optimized(alfaBetaPictureTwo.get(0),d1D2PictureTwo.get(1),KulbakForPictureTwo);
+                averageKfe += optimized(alfaBetaPictureThree.get(0),d1D2PictureThree.get(1),KulbakForPictureThree);
+
+
+                averageKfe /= 3;
+
+                if (averageKfe > maxKfeAverage) {
+                    maxKfeAverage = averageKfe;
+                    delta = i;
+                }
+
+
+            } catch (IOException e) {
+                System.out.println(e.getMessage());
+
+            }
+
+        }
+        System.out.println( " Оптимальное кфе : " + maxKfeAverage + "  оптимальная дельта :  " + delta);
+        return Arrays.asList(maxKfeAverage, (double) delta);
+    }
+
+    public void examAlgorithm(boolean[][] learningMatrix, List<boolean[]> vectors, LearningMatrixHandler handler, List<double[]> kfe) {
+        double maxMu = 0;
+        int index = -1;
+
+        for (int i = 0; i < vectors.size(); i++) {
+            boolean[] referenceVector = vectors.get(i);
+            int[] ints = handler.calculateDistance(learningMatrix, referenceVector);
+            double[] mu = new double[ints.length];
+            double averageMu = 0;
+            int optRadius = getOptRadius(kfe.get(i));
+
+            for (int j = 0; j < ints.length; j++) {
+                mu[j] = 1 - (double) ints[j] / optRadius;
+                averageMu += mu[j];
+            }
+
+            averageMu /= ints.length;
+
+            System.out.println("index: " + i + " = " + averageMu);
+
+            if (averageMu > maxMu) {
+                maxMu = averageMu;
+                index = i;
+            }
+        }
+
+        if (maxMu > 0) {
+            System.out.println("Это изображение принадлежит " + (index + 1) + "-му  класу");
+        } else {
+            System.out.println("Это изображение не принадлежит ни одному из классов");
+        }
+    }
+
+    private int getOptRadius(double[] kfe) {
+        double max = 0;
+        int index = -1;
+
+        for (int i = 0; i < kfe.length; i++) {
+            if (kfe[i] > max) {
+                max = kfe[i];
+                index = i;
+            }
+        }
+
+        return index;
+    }
 
 }
