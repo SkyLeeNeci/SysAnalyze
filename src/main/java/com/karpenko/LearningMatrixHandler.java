@@ -183,13 +183,11 @@ public class LearningMatrixHandler {
                     }
                 }
             }
-
-
             neighbors.add(indexNeighbor);
         }
     }
 
-    private int compareDifferences(boolean[] vectorOne, boolean[] vectorTwo) {
+    public int compareDifferences(boolean[] vectorOne, boolean[] vectorTwo) {
         int countDifferences = 0;
 
         for (int i = 0; i < vectorOne.length; i++) {
@@ -197,7 +195,6 @@ public class LearningMatrixHandler {
                 countDifferences++;
             }
         }
-
         return countDifferences;
     }
 
