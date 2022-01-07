@@ -24,23 +24,4 @@ public class Main extends Application {
         launch(args);
 
     }
-
-    /*private static void showReferenceVector(List<boolean[]> referenceVectors) {
-        for (boolean[] referenceVector : referenceVectors) {
-            for (int i = 0; i < referenceVector.length; i++) {
-                System.out.print((referenceVector[i] ? 1 : 0) + " ");
-            }
-            System.out.println();
-        }
-    }*/
-
-    /*private static void showLearningMatrix(boolean[][] secondLearningMatrix) {
-        for (int i = 0; i < secondLearningMatrix.length; i++) {
-            for (int j = 0; j < secondLearningMatrix[0].length; j++) {
-                System.out.print((secondLearningMatrix[i]
-                [j] ? 1 : 0) + " ");
-            }
-            System.out.println();
-        }
-    }*/
 }

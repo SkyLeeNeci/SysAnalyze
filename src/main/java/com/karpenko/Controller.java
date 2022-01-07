@@ -157,7 +157,7 @@ public class Controller {
             ImageHandler firstImageHandler = new ImageHandler("1.bmp");
             ImageHandler secondImageHandler = new ImageHandler("2.bmp");
             ImageHandler thirdImageHandler = new ImageHandler("11.bmp");
-            ImageHandler foursImageHandler = new ImageHandler("2.bmp");
+            ImageHandler foursImageHandler = new ImageHandler("22.bmp");
             int[][] firstImageMatrix = firstImageHandler.getImageMatrix();
             first_picture.setImage(new Image(new File("1.bmp").toURI().toURL().toString()));
             second_picture.setImage(new Image(new File("2.bmp").toURI().toURL().toString()));
@@ -200,6 +200,16 @@ public class Controller {
                 builder3.append("\n");
             }
             third_picture_matrix.setText(builder3.toString());
+
+            /*StringBuilder builder4 = new StringBuilder();
+            int[][] fourImageMatrix = foursImageHandler.getImageMatrix();
+            for (int i = 0; i < fourImageMatrix.length; i++) {
+                for (int j = 0; j < fourImageMatrix[0].length; j++) {
+                    builder4.append(fourImageMatrix[i][j]).append(" ");
+                }
+                builder4.append("\n");
+            }
+            System.out.println(builder4);*/
 
             int[] firstVector = firstImageHandler.getVectors();
 
@@ -272,7 +282,7 @@ public class Controller {
             AlfaBetaD1D2 alfaBetaD1D2pict2 = matrixHandler.denis1(elementsInRadiusPictTwo);
             AlfaBetaD1D2 alfaBetaD1D2pict3 = matrixHandler.denis1(elementsInRadiusPictThree);
 
-          /*  System.out.println("==============Точнісні характеристики зображення 1================");
+            /*System.out.println("==============Точнісні характеристики зображення 1================");
             System.out.println(showReferenceVector(alfaBetaD1D2pict1.getAlfaBeta().get(0)));
             System.out.println(showReferenceVector(alfaBetaD1D2pict1.getAlfaBeta().get(1)));
             System.out.println(showReferenceVector(alfaBetaD1D2pict1.getD1D2().get(0)));
@@ -305,7 +315,7 @@ public class Controller {
             double[] ShenonForPictureThree = matrixHandler.calculateByShenonFormula(alfaBetaPictureThree.get(0), alfaBetaPictureThree.get(1),d1D2PictureThree.get(0),d1D2PictureThree.get(1));
 
 
-            /*System.out.print(showReferenceVector(KulbakForPictureOne) + "\n");
+           /* System.out.print(showReferenceVector(KulbakForPictureOne) + "\n");
             System.out.print(showReferenceVector(ShenonForPictureOne) + "\n");
             System.out.print(showReferenceVector(KulbakForPictureTwo) + "\n");
             System.out.print(showReferenceVector(ShenonForPictureTwo) + "\n");*/
@@ -464,7 +474,7 @@ public class Controller {
                 int[][] thirdImageMatrix = thirdImageHandler.getImageMatrix();
                 int[] firstVector = firstImageHandler.getVectors();
 
-                //30 30 // 40 40 лучше
+                // 40 40
                 LearningMatrixHandler matrixHandler = new LearningMatrixHandler(firstVector, i, i);
                 matrixHandler.setMatrixList(Arrays.asList(firstImageMatrix, secondImageMatrix, thirdImageMatrix));
 
